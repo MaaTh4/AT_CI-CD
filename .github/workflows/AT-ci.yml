@@ -20,7 +20,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Echo básico
-        run: echo "Workflow AT rodando no ambiente: ${{ env.DEPLOY_ENV }}"
+        run: |
+          echo "Workflow AT rodando no ambiente: $DEPLOY_ENV"
 
       - name: Mensagem diferente por ambiente
         run: |
