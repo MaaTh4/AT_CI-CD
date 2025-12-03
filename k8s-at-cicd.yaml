@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: at-cicd-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: at-cicd
+  template:
+    metadata:
+      labels:
+        app: at-cicd
+    spec:
+      containers:
+        - name: at-cicd
+          image: maat04/at_cicd:1.0.0
+          imagePullPolicy: IfNotPresent
+          #   - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: at-cicd-service
+spec:
+  selector:
+    app: at-cicd
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080

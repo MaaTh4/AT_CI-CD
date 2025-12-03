@@ -1,0 +1,44 @@
+name: AT CI
+
+on:
+  push:
+
+jobs:
+  echo-env:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        environment: [dev, staging, prod]
+
+    env:
+      DEPLOY_ENV: ${{ matrix.environment }}
+      API_KEY: ${{ secrets.API_KEY }}
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Echo básico
+        run: echo "Workflow AT rodando no ambiente: ${{ env.DEPLOY_ENV }}"
+
+      - name: Mensagem diferente por ambiente
+        run: |
+          echo "Ambiente atual: $DEPLOY_ENV"
+
+          if [ "$DEPLOY_ENV" = "dev" ]; then
+            echo ">> DEV: executando verificações de desenvolvimento..."
+          elif [ "$DEPLOY_ENV" = "staging" ]; then
+            echo ">> STAGING: executando testes de homologação..."
+          elif [ "$DEPLOY_ENV" = "prod" ]; then
+            echo ">> PROD: pronto para deploy em produção!"
+          fi
+
+      - name: Validar uso do secret
+        run: |
+          if [ -n "$API_KEY" ]; then
+            echo "API_KEY configurada via secrets (valor não será exibido)."
+          else
+            echo "API_KEY NÃO configurada. Configure em Settings > Secrets."
+            exit 1
+          fi
