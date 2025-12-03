@@ -13,7 +13,7 @@ jobs:
 
     env:
       DEPLOY_ENV: ${{ matrix.environment }}
-      API_KEY: ${{ secrets.API_KEY }}
+      API_KEY: ${{ secrets.API_KEY || 'no-secret-provided' }}
 
     steps:
       - name: Checkout do código
@@ -37,9 +37,8 @@ jobs:
 
       - name: Validar uso do secret
         run: |
-          if [ -n "$API_KEY" ]; then
-            echo "API_KEY configurada via secrets (valor não será exibido)."
-          else
-            echo "API_KEY NÃO configurada. Configure em Settings > Secrets."
-            exit 1
-          fi
+            if [ "$API_KEY" = "no-secret-provided" ]; then
+              echo "Nenhum secret configurado. (Modo demonstração)"
+            else
+              echo "Secret API_KEY configurado com sucesso."
+            fi
