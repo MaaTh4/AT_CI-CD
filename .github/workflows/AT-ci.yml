@@ -38,7 +38,7 @@ jobs:
       - name: Validar uso do secret
         run: |
             if [ "$API_KEY" = "no-secret-provided" ]; then
-              echo "Nenhum secret configurado. (Modo demonstração)"
+              echo "Nenhum secret configurado."
             else
               echo "Secret API_KEY configurado com sucesso."
             fi
